@@ -20,6 +20,7 @@
 \usepackage{parskip}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{needspace}
 
 % ---------- Colors ----------
 \definecolor{cvaccent}{RGB}{31,73,125}
@@ -40,8 +41,10 @@
   {}{0em}{}[\titlerule]
 \titlespacing*{\section}{0pt}{12pt}{6pt}
 
+% \needspace here keeps a heading from being stranded alone at the
+% bottom of a page with its content pushed to the next one.
 \titleformat{\subsection}
-  {\normalfont\large\bfseries}
+  {\needspace{5\baselineskip}\normalfont\large\bfseries}
   {}{0em}{}
 \titlespacing*{\subsection}{0pt}{8pt}{2pt}
 
@@ -58,6 +61,11 @@
 \newcommand{\cvjob}[4]{%
   \noindent\textbf{#1} \; (#2) \; --- \; \textbf{#3} \; at \; \textbf{#4}\par\vspace{2pt}
 }
+
+% ---------- Sub-project heading (nested inside a job entry) ----------
+% \cvproject{title} — like \textit{title} but reserves enough space to
+% keep the heading and its first bullet together on one page.
+\newcommand{\cvproject}[1]{\needspace{3\baselineskip}\textit{#1}}
 
 % ---------- Company/school logo helper ----------
 % \cvlogo[height]{path/to/file} — small inline image, right-aligned at
