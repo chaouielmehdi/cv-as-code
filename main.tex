@@ -60,11 +60,15 @@
 }
 
 % ---------- Company/school logo helper ----------
-% \cvlogo{path/to/file} — small inline image, right-aligned at the end
-% of a \subsection* heading. ALWAYS keep the company name as plain text
+% \cvlogo[height]{path/to/file} — small inline image, right-aligned at
+% the end of a heading line. ALWAYS keep the company name as plain text
 % in the heading too; the logo is decoration, never a substitute.
-\newcommand{\cvlogo}[1]{%
-  \hfill\raisebox{-0.25\height}{\includegraphics[height=1.05em]{#1}}%
+% Default height (12.6pt) is tuned for use inside a \subsection* heading
+% (set in \large). Logos placed in normal-size text (e.g. education.tex)
+% or logos that read small at the default size need an explicit height
+% override — pass it as the optional first argument, e.g. \cvlogo[18pt]{...}.
+\newcommand{\cvlogo}[2][12.6pt]{%
+  \hfill\raisebox{-0.25\height}{\includegraphics[height=#1]{#2}}%
 }
 
 % No page numbers, no headers/footers — cleaner for ATS parsers
