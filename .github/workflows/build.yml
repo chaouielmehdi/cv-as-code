@@ -26,7 +26,7 @@ jobs:
           root_file: main.tex
 
       - name: Rename compiled PDF
-        run: mv main.pdf cv.pdf
+        run: mv main.pdf CV-CHAOUI-EL-MEHDI.pdf
 
       - name: Publish (or update) the "latest" release
         uses: ncipollo/release-action@v1
@@ -35,11 +35,12 @@ jobs:
           name: Latest CV
           body: |
             Automatically built from commit ${{ github.sha }}.
-            Permanent download link: `releases/download/latest/cv.pdf`
+            Permanent download link: `releases/download/latest/CV-CHAOUI-EL-MEHDI.pdf`
             Inline browser preview: published via GitHub Pages.
-          artifacts: cv.pdf
+          artifacts: CV-CHAOUI-EL-MEHDI.pdf
           allowUpdates: true
           replacesArtifacts: true
+          removeArtifacts: true
           makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -50,7 +51,7 @@ jobs:
       - name: Prepare Pages content
         run: |
           mkdir -p public
-          cp cv.pdf public/cv.pdf
+          cp CV-CHAOUI-EL-MEHDI.pdf public/CV-CHAOUI-EL-MEHDI.pdf
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

@@ -9,8 +9,8 @@ The compiled CV PDF is published to **two fixed, permanent URLs**, both
 updated by the same CI run on every push to `main`:
 
 ```
-Download (forces "Save As"):     https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/cv.pdf
-View inline in the browser:      https://chaouielmehdi.github.io/cv-as-code/cv.pdf
+Download (forces "Save As"):     https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/CV-CHAOUI-EL-MEHDI.pdf
+View inline in the browser:      https://chaouielmehdi.github.io/cv-as-code/CV-CHAOUI-EL-MEHDI.pdf
 ```
 
 They're the same PDF. GitHub always serves Release assets with a forced
@@ -61,7 +61,7 @@ release asset is only replaced on success). Instead:
 ## Why Releases, not Actions artifacts
 
 Actions artifacts are ephemeral (expire, require auth, and get a new URL each
-run). The Releases asset at `releases/download/latest/cv.pdf` is a stable,
+run). The Releases asset at `releases/download/latest/CV-CHAOUI-EL-MEHDI.pdf` is a stable,
 permanent link — safe to put on a resume, LinkedIn profile, or share directly
 with a recruiter.
 
