@@ -2,7 +2,10 @@
 % ============================================================
 % main.tex — Layout & styling ONLY.
 % Do not put CV content here — edit files in sections/ instead.
-% ATS-friendly: single column, no tables/graphics/icons, selectable text.
+% ATS-friendly: single column, no tables, selectable text throughout.
+% Company logos (\cvlogo) are small decorative images placed beside
+% company names that are ALWAYS also present as plain text — see
+% skills/cv-editor/SKILL.md for the ATS-compatibility rationale.
 % ============================================================
 \documentclass[10pt,a4paper]{article}
 
@@ -16,6 +19,7 @@
 \usepackage{hyperref}
 \usepackage{parskip}
 \usepackage{xcolor}
+\usepackage{graphicx}
 
 % ---------- Colors ----------
 \definecolor{cvaccent}{RGB}{31,73,125}
@@ -53,6 +57,14 @@
 % \cvjob{Dates}{Duration}{Role}{Company}
 \newcommand{\cvjob}[4]{%
   \noindent\textbf{#1} \; (#2) \; --- \; \textbf{#3} \; at \; \textbf{#4}\par\vspace{2pt}
+}
+
+% ---------- Company/school logo helper ----------
+% \cvlogo{path/to/file} — small inline image, right-aligned at the end
+% of a \subsection* heading. ALWAYS keep the company name as plain text
+% in the heading too; the logo is decoration, never a substitute.
+\newcommand{\cvlogo}[1]{%
+  \hfill\raisebox{-0.25\height}{\includegraphics[height=1.05em]{#1}}%
 }
 
 % No page numbers, no headers/footers — cleaner for ATS parsers

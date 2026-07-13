@@ -91,11 +91,29 @@ cv-as-code/
 
 ## ATS-compatibility reminders
 
-- Never add tables, multi-column layouts, text boxes, images, icons, or
-  custom fonts/symbols for section headers or bullets — they break ATS
-  parsers. Plain `itemize`/`\section*`/`\subsection*` only.
-- Keep contact info, dates, and company names as plain selectable text (not
-  inside `\includegraphics` logos or `tikzpicture` shapes).
+- Never add tables, multi-column layouts, text boxes, or custom fonts/symbols
+  for section headers or bullets — they break ATS parsers. Plain
+  `itemize`/`\section*`/`\subsection*` only.
+- Keep contact info, dates, and company names as plain selectable text —
+  never as text baked into an image. Every fact on the CV must exist as real
+  text somewhere, regardless of any decoration placed next to it.
+- **Company/school logos are the one sanctioned exception**, added via the
+  `\cvlogo{path}` macro (defined in `main.tex`) at the end of a
+  `\subsection*` heading — see `assets/logos/` and how `sections/experience.tex`
+  and `sections/education.tex` use it. They are purely decorative and placed
+  *in addition to* the plain-text company name that's already in the
+  heading, never instead of it. Rules for adding a new one:
+  - Extract/save the logo as a PNG in `assets/logos/`, cropped to its visual
+    content (no large empty margins — `\cvlogo` fixes the height, so a
+    logo with lots of internal whitespace will render illegibly small).
+  - Reference it with `\cvlogo{assets/logos/<name>.png}` right after the
+    heading text, before the closing `}`.
+  - Never let a logo be the *only* place a company name appears — if you
+    can't confirm the name is also present as plain text nearby, don't add
+    the logo.
+  - After adding one, run `pdftotext main.pdf -` (or `pdftotext -layout`) and
+    confirm the company name still shows up in the plain-text output — that's
+    the real ATS-safety check, not just how it looks.
 - Don't use `\newpage` to force layout — let content flow naturally.
 - Keep standard section names ATS systems expect (Expérience Professionnelle,
   Formation, Compétences) rather than creative headers.
