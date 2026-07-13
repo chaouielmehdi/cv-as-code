@@ -7,10 +7,15 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,8 +36,27 @@ jobs:
           body: |
             Automatically built from commit ${{ github.sha }}.
             Permanent download link: `releases/download/latest/cv.pdf`
+            Inline browser preview: published via GitHub Pages.
           artifacts: cv.pdf
           allowUpdates: true
           replacesArtifacts: true
           makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      # GitHub Pages serves files with Content-Type: application/pdf and no
+      # forced download, unlike Release assets — so this URL opens inline
+      # in the browser. Requires Pages enabled once in repo Settings > Pages
+      # > Build and deployment > Source: GitHub Actions.
+      - name: Prepare Pages content
+        run: |
+          mkdir -p public
+          cp cv.pdf public/cv.pdf
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@v4
