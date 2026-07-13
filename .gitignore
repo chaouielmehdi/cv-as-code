@@ -1,0 +1,26 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.xdv
+
+# Compiled output
+*.pdf
+build/
+
+# OS / editor cruft
+.DS_Store
+*.swp
+
+# Claude Code local settings
+.claude/

@@ -1,0 +1,87 @@
+% !TEX program = pdflatex
+% ============================================================
+% main.tex — Layout & styling ONLY.
+% Do not put CV content here — edit files in sections/ instead.
+% ATS-friendly: single column, no tables/graphics/icons, selectable text.
+% ============================================================
+\documentclass[10pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[a4paper,margin=1.6cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+
+% ---------- Colors ----------
+\definecolor{cvaccent}{RGB}{31,73,125}
+\definecolor{cvgray}{RGB}{80,80,80}
+
+% ---------- Hyperlinks ----------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cvaccent,
+    urlcolor=cvaccent,
+    pdftitle={Chaoui El Mehdi - CV},
+    pdfauthor={Chaoui El Mehdi}
+}
+
+% ---------- Section styling ----------
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{cvaccent}}
+  {}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {}{0em}{}
+\titlespacing*{\subsection}{0pt}{8pt}{2pt}
+
+% ---------- List styling (ATS-safe bullets, no custom symbols) ----------
+\setlist[itemize,1]{leftmargin=1.4em, itemsep=1pt, topsep=2pt, parsep=0pt}
+\setlist[itemize,2]{leftmargin=2.6em, itemsep=1pt, topsep=1pt, parsep=0pt}
+
+% ---------- Header helper commands (used in main.tex only) ----------
+\newcommand{\cvname}[1]{{\Huge\bfseries #1}}
+\newcommand{\cvtitle}[1]{{\Large\color{cvgray} #1}}
+
+% ---------- Reusable command for a job entry heading ----------
+% \cvjob{Dates}{Duration}{Role}{Company}
+\newcommand{\cvjob}[4]{%
+  \noindent\textbf{#1} \; (#2) \; --- \; \textbf{#3} \; at \; \textbf{#4}\par\vspace{2pt}
+}
+
+% No page numbers, no headers/footers — cleaner for ATS parsers
+\pagestyle{empty}
+
+\begin{document}
+
+% ============================================================
+% HEADER
+% ============================================================
+\begin{center}
+    \cvname{Chaoui El Mehdi}\\[2pt]
+    \cvtitle{Ingénieur en Développement Informatique}\\[6pt]
+    +212 6 74 47 86 81 \;\textbar\;
+    \href{mailto:chaouielmehdii@gmail.com}{chaouielmehdii@gmail.com} \;\textbar\;
+    \href{https://github.com/chaouielmehdi}{github.com/chaouielmehdi} \;\textbar\;
+    \href{https://linkedin.com/in/el-mehdi-chaoui}{linkedin.com/in/el-mehdi-chaoui}\\[2pt]
+    Casablanca, Maroc
+\end{center}
+
+\vspace{-4pt}
+
+% ============================================================
+% SECTIONS (content lives in sections/*.tex)
+% ============================================================
+\input{sections/profile.tex}
+\input{sections/experience.tex}
+\input{sections/projects.tex}
+\input{sections/education.tex}
+\input{sections/skills.tex}
+
+\end{document}

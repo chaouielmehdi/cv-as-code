@@ -1,0 +1,38 @@
+name: Build CV
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX to PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+
+      - name: Rename compiled PDF
+        run: mv main.pdf cv.pdf
+
+      - name: Publish (or update) the "latest" release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: latest
+          name: Latest CV
+          body: |
+            Automatically built from commit ${{ github.sha }}.
+            Permanent download link: `releases/download/latest/cv.pdf`
+          artifacts: cv.pdf
+          allowUpdates: true
+          replacesArtifacts: true
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
