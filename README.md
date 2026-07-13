@@ -16,7 +16,7 @@ cv-as-code/
 │   ├── education.tex         # Formation
 │   ├── skills.tex            # Compétences Techniques, Langues, Atouts, Interests
 │   └── projects.tex          # Personal/side projects (empty placeholder)
-├── .github/workflows/build.yml   # CI: compile → publish to GitHub Releases
+├── .github/workflows/build.yml   # CI: compile → publish to Releases + Pages
 ├── skills/
 │   ├── cv-editor/SKILL.md    # How to edit CV content correctly
 │   └── cv-export/SKILL.md    # How to hand over the compiled PDF
@@ -45,17 +45,31 @@ GitHub Actions (`.github/workflows/build.yml`) will:
 1. Compile `main.tex` with `xu-cheng/latex-action`.
 2. Publish the resulting PDF as `cv.pdf` to a GitHub Release tagged `latest`,
    replacing the previous asset.
+3. Also deploy the same PDF to GitHub Pages, for inline browser viewing.
 
 Build time is roughly 30–60 seconds after the push.
 
-## Download the compiled PDF
+## Getting the compiled PDF
 
-The compiled CV always lives at this fixed, permanent URL — it never changes
-across builds:
+Two permanent URLs, same PDF, updated on every push to `main`:
 
-**https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/cv.pdf**
+- **Download (forces "Save As")**:
+  https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/cv.pdf
+- **View inline in the browser**:
+  https://chaouielmehdi.github.io/cv-as-code/cv.pdf
 
-Safe to bookmark, share with recruiters, or link from LinkedIn.
+GitHub always serves Release assets with a forced download — that's a
+platform behavior, not something this repo can turn off. The Pages URL is
+the fix: Pages serves the same PDF as a normal `Content-Type: application/pdf`
+response, so browsers open it directly instead of prompting to save.
+
+Both links are safe to bookmark, share with recruiters, or link from LinkedIn.
+
+**Note:** this repo is private, and GitHub Pages needs a GitHub Pro (or
+Team/Enterprise) plan to publish from a private repository — and the
+published Pages site is publicly reachable at that URL regardless of the
+repo's visibility. Pages must also be enabled once manually: repo
+**Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 ## Compiling locally (optional)
 

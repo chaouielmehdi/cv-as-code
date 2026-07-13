@@ -5,20 +5,29 @@ description: Hand over the compiled CV PDF when the user asks to "give me my CV"
 
 # CV Export
 
-The compiled CV PDF is published to a **fixed, permanent URL** via a GitHub
-Release tagged `latest`. This URL never changes across builds — every push to
-`main` recompiles the CV and updates the same release asset in place.
+The compiled CV PDF is published to **two fixed, permanent URLs**, both
+updated by the same CI run on every push to `main`:
 
 ```
-https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/cv.pdf
+Download (forces "Save As"):     https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/cv.pdf
+View inline in the browser:      https://chaouielmehdi.github.io/cv-as-code/cv.pdf
 ```
+
+They're the same PDF. GitHub always serves Release assets with a forced
+download (`Content-Disposition: attachment`) — that's a platform behavior,
+not something this repo controls. GitHub Pages serves the identical file with
+a normal `Content-Type: application/pdf` response, so it opens directly in
+the browser instead of prompting to save.
 
 ## Default behavior
 
 When asked to "give me my CV", "export my CV", "send me the PDF", "download
 the CV", etc.:
 
-1. Just return the link above. Do **not**:
+1. Return the download (Releases) link. If the request implies wanting to
+   *view* it rather than save it (e.g. "show me my CV", "let me see it",
+   "preview it"), give the Pages link instead — or offer both.
+2. Do **not**:
    - Compile `main.tex` locally and send that file instead.
    - Look through GitHub Actions run artifacts for a PDF.
    - Regenerate anything, unless the user explicitly asks for a fresh local
@@ -53,5 +62,15 @@ release asset is only replaced on success). Instead:
 
 Actions artifacts are ephemeral (expire, require auth, and get a new URL each
 run). The Releases asset at `releases/download/latest/cv.pdf` is a stable,
-public, permanent link — safe to put on a resume, LinkedIn profile, or share
-directly with a recruiter.
+permanent link — safe to put on a resume, LinkedIn profile, or share directly
+with a recruiter.
+
+## If the Pages link 404s or the deploy step fails
+
+This repo is private. GitHub Pages requires a paid plan (GitHub Pro, or
+Team/Enterprise for an org) to publish from a private repository, and Pages
+must be turned on once manually: repo **Settings → Pages → Build and
+deployment → Source: GitHub Actions**. If the "Deploy to GitHub Pages" step
+in `Build CV` fails or the URL 404s, that's almost always one of these two
+things — not a bug in the workflow. Point the user at Settings → Pages rather
+than trying to "fix" it in code.
