@@ -25,7 +25,7 @@ cv-as-code/
 │                              # projects in the source CV are client engagements
 │                              # already documented under their employer in
 │                              # experience.tex)
-├── .github/workflows/build.yml  # Compiles main.tex → releases/download/latest/cv.pdf
+├── .github/workflows/build.yml  # Compiles main.tex → releases/download/latest/CV-CHAOUI-EL-MEHDI.pdf
 └── README.md
 ```
 

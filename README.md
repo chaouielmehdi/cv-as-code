@@ -43,8 +43,8 @@ git push origin main
 
 GitHub Actions (`.github/workflows/build.yml`) will:
 1. Compile `main.tex` with `xu-cheng/latex-action`.
-2. Publish the resulting PDF as `cv.pdf` to a GitHub Release tagged `latest`,
-   replacing the previous asset.
+2. Publish the resulting PDF as `CV-CHAOUI-EL-MEHDI.pdf` to a GitHub Release
+   tagged `latest`, replacing the previous asset.
 3. Also deploy the same PDF to GitHub Pages, for inline browser viewing.
 
 Build time is roughly 30–60 seconds after the push.
@@ -54,9 +54,9 @@ Build time is roughly 30–60 seconds after the push.
 Two permanent URLs, same PDF, updated on every push to `main`:
 
 - **Download (forces "Save As")**:
-  https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/cv.pdf
+  https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/CV-CHAOUI-EL-MEHDI.pdf
 - **View inline in the browser**:
-  https://chaouielmehdi.github.io/cv-as-code/cv.pdf
+  https://chaouielmehdi.github.io/cv-as-code/CV-CHAOUI-EL-MEHDI.pdf
 
 GitHub always serves Release assets with a forced download — that's a
 platform behavior, not something this repo can turn off. The Pages URL is
