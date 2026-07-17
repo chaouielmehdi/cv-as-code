@@ -1,13 +1,19 @@
 # cv-as-code
 
-This repo holds Chaoui El Mehdi's CV as LaTeX source. `sections/*.tex` is the
-single source of truth for content — there is no PDF stored in this repo; CI
-compiles one on every push to `main` and publishes it to a permanent GitHub
-Releases link.
+This repo holds Chaoui El Mehdi's CV as LaTeX source, in **two languages**:
+`fr/` (French) and `en/` (English). Each has its own `main.tex` and
+`sections/*.tex` — these are the single source of truth for content; there
+is no PDF stored in this repo. CI compiles both on every push to `main` and
+publishes them to permanent GitHub Releases links.
+
+`fr/` and `en/` are independent files, not one templated source — a content
+change (a new role, an updated bullet, a reworded title) needs to be made in
+**both** languages, or they will drift out of sync. When editing one, always
+check whether the other needs the same edit.
 
 For how to edit content vs. layout, CV conventions (tense, bullet style,
-one-page-oriented trimming, ATS-safety), and how to hand over the compiled
-PDF, see:
+one-page-oriented trimming, ATS-safety, keeping FR/EN in sync), and how to
+hand over the compiled PDFs, see:
 - `skills/cv-editor/SKILL.md`
 - `skills/cv-export/SKILL.md`
 

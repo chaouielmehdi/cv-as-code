@@ -20,13 +20,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compile LaTeX to PDF
+      # Two independent LaTeX builds — fr/ and en/ each have their own
+      # main.tex and sections/, sharing the logos in assets/logos/ via
+      # relative ../assets/logos/... paths. See skills/cv-editor/SKILL.md
+      # for how to keep both language versions in sync.
+      - name: Compile French CV
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
+          working_directory: fr
 
-      - name: Rename compiled PDF
-        run: mv main.pdf CV-CHAOUI-EL-MEHDI.pdf
+      - name: Compile English CV
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: en
+
+      - name: Rename compiled PDFs
+        run: |
+          mv fr/main.pdf CV-CHAOUI-EL-MEHDI-FR.pdf
+          mv en/main.pdf CV-CHAOUI-EL-MEHDI-EN.pdf
 
       - name: Publish (or update) the "latest" release
         uses: ncipollo/release-action@v1
@@ -35,9 +48,11 @@ jobs:
           name: Latest CV
           body: |
             Automatically built from commit ${{ github.sha }}.
-            Permanent download link: `releases/download/latest/CV-CHAOUI-EL-MEHDI.pdf`
+            Permanent download links:
+            - French: `releases/download/latest/CV-CHAOUI-EL-MEHDI-FR.pdf`
+            - English: `releases/download/latest/CV-CHAOUI-EL-MEHDI-EN.pdf`
             Inline browser preview: published via GitHub Pages.
-          artifacts: CV-CHAOUI-EL-MEHDI.pdf
+          artifacts: CV-CHAOUI-EL-MEHDI-FR.pdf,CV-CHAOUI-EL-MEHDI-EN.pdf
           allowUpdates: true
           replacesArtifacts: true
           removeArtifacts: true
@@ -45,13 +60,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # GitHub Pages serves files with Content-Type: application/pdf and no
-      # forced download, unlike Release assets — so this URL opens inline
+      # forced download, unlike Release assets — so these URLs open inline
       # in the browser. Requires Pages enabled once in repo Settings > Pages
       # > Build and deployment > Source: GitHub Actions.
       - name: Prepare Pages content
         run: |
           mkdir -p public
-          cp CV-CHAOUI-EL-MEHDI.pdf public/CV-CHAOUI-EL-MEHDI.pdf
+          cp CV-CHAOUI-EL-MEHDI-FR.pdf public/CV-CHAOUI-EL-MEHDI-FR.pdf
+          cp CV-CHAOUI-EL-MEHDI-EN.pdf public/CV-CHAOUI-EL-MEHDI-EN.pdf
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
