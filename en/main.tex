@@ -1,0 +1,116 @@
+% !TEX program = pdflatex
+% ============================================================
+% main.tex — Layout & styling ONLY.
+% Do not put CV content here — edit files in sections/ instead.
+% ATS-friendly: single column, no tables, selectable text throughout.
+% Company logos (\cvlogo) are small decorative images placed beside
+% company names that are ALWAYS also present as plain text — see
+% skills/cv-editor/SKILL.md for the ATS-compatibility rationale.
+% ============================================================
+\documentclass[10pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[a4paper,margin=1.6cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{needspace}
+\usepackage{xparse}
+
+% ---------- Colors ----------
+\definecolor{cvaccent}{RGB}{31,73,125}
+\definecolor{cvgray}{RGB}{80,80,80}
+
+% ---------- Hyperlinks ----------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cvaccent,
+    urlcolor=cvaccent,
+    pdftitle={Chaoui El Mehdi - CV (English)},
+    pdfauthor={Chaoui El Mehdi}
+}
+
+% ---------- Section styling ----------
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{cvaccent}}
+  {}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+
+% \needspace here keeps a heading from being stranded alone at the
+% bottom of a page with its content pushed to the next one.
+\titleformat{\subsection}
+  {\needspace{5\baselineskip}\normalfont\large\bfseries}
+  {}{0em}{}
+\titlespacing*{\subsection}{0pt}{8pt}{2pt}
+
+% ---------- List styling (ATS-safe bullets, no custom symbols) ----------
+\setlist[itemize,1]{leftmargin=1.4em, itemsep=1pt, topsep=2pt, parsep=0pt}
+\setlist[itemize,2]{leftmargin=2.6em, itemsep=1pt, topsep=1pt, parsep=0pt}
+
+% ---------- Header helper commands (used in main.tex only) ----------
+\newcommand{\cvname}[1]{{\Huge\bfseries #1}}
+\newcommand{\cvtitle}[1]{{\Large\color{cvgray} #1}}
+
+% ---------- Reusable command for a job entry heading ----------
+% \cvjob{Dates}{Duration}{Role}{Company}
+\newcommand{\cvjob}[4]{%
+  \noindent\textbf{#1} \; (#2) \; --- \; \textbf{#3} \; at \; \textbf{#4}\par\vspace{2pt}
+}
+
+% ---------- Sub-project heading (nested inside a job entry) ----------
+% \cvproject{title} — like \textit{title} but reserves enough space to
+% keep the heading and its first bullet together on one page.
+\newcommand{\cvproject}[1]{\needspace{3\baselineskip}\textit{#1}}
+
+% ---------- Company/school logo helper ----------
+% \cvlogo[height][raise]{path/to/file} — small inline image, right-aligned
+% at the end of a heading line. ALWAYS keep the company name as plain text
+% in the heading too; the logo is decoration, never a substitute.
+% Default height (17pt) is tuned for use inside a \subsection* heading
+% (set in \large). Logos placed in normal-size text (e.g. education.tex)
+% or logos that read small at the default size need an explicit height
+% override — pass it as the first optional argument, e.g. \cvlogo[24pt]{...}.
+% The second optional argument (default -0.25, meaning -0.25\height) nudges
+% the logo up/down to align its visual weight with the title baseline —
+% logos with a more square aspect ratio usually need a larger downward
+% shift, e.g. \cvlogo[30pt][-0.4]{...}.
+\NewDocumentCommand{\cvlogo}{O{17pt} O{-0.25} m}{%
+  \hfill\raisebox{#2\height}{\includegraphics[height=#1]{#3}}%
+}
+
+% No page numbers, no headers/footers — cleaner for ATS parsers
+\pagestyle{empty}
+
+\begin{document}
+
+% ============================================================
+% HEADER
+% ============================================================
+\begin{center}
+    \cvname{Chaoui El Mehdi}\\[2pt]
+    \cvtitle{Software Development Engineer}\\[6pt]
+    +212 6 74 47 86 81 \;\textbar\;
+    \href{mailto:chaouielmehdii@gmail.com}{chaouielmehdii@gmail.com} \;\textbar\;
+    \href{https://github.com/chaouielmehdi}{github.com/chaouielmehdi} \;\textbar\;
+    \href{https://linkedin.com/in/el-mehdi-chaoui}{linkedin.com/in/el-mehdi-chaoui}\\[2pt]
+    Casablanca, Morocco
+\end{center}
+
+\vspace{-4pt}
+
+% ============================================================
+% SECTIONS (content lives in sections/*.tex)
+% ============================================================
+\input{sections/profile.tex}
+\input{sections/experience.tex}
+\input{sections/projects.tex}
+\input{sections/education.tex}
+\input{sections/skills.tex}
+
+\end{document}
