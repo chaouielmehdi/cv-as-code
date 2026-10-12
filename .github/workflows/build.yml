@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  # PRs into main only compile both CVs (the "build" job) so a broken LaTeX
+  # PRs into main only compile every CV (the "build" job) so a broken LaTeX
   # change is caught before merging. Publishing runs on push to main only.
   pull_request:
     branches:
@@ -19,26 +19,37 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Two independent LaTeX builds — fr/ and en/ each have their own
-      # main.tex and sections/, sharing the logos in assets/logos/ via
-      # relative ../assets/logos/... paths. See skills/cv-editor/SKILL.md
-      # for how to keep both language versions in sync.
-      - name: Compile French CV
+      # Every CV is an independent LaTeX build with its own main.tex and
+      # sections/: the general CV in main/fr and main/en, plus one folder per
+      # job offer in adapted-by-offers/<offer>/<lang>. All share the logos in
+      # assets/logos/ via relative paths, so each file is compiled from inside
+      # its own directory. New offer folders are picked up by the glob — no
+      # workflow change needed. See skills/cv-editor/SKILL.md.
+      - name: Compile all CVs
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex
-          working_directory: fr
+          root_file: |
+            main/*/main.tex
+            adapted-by-offers/*/*/main.tex
+          work_in_root_file_dir: true
 
-      - name: Compile English CV
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: main.tex
-          working_directory: en
-
+      # main/fr -> CV-CHAOUI-EL-MEHDI-FR.pdf (permanent links, unchanged)
+      # adapted-by-offers/alton-narsa-chatbot/fr
+      #   -> CV-CHAOUI-EL-MEHDI-FR-ALTON-NARSA-CHATBOT.pdf
       - name: Rename compiled PDFs
         run: |
-          mv fr/main.pdf CV-CHAOUI-EL-MEHDI-FR.pdf
-          mv en/main.pdf CV-CHAOUI-EL-MEHDI-EN.pdf
+          shopt -s nullglob  # adapted-by-offers/ may be empty
+          mkdir -p out
+          for pdf in main/*/main.pdf; do
+            lang=$(basename "$(dirname "$pdf")" | tr '[:lower:]' '[:upper:]')
+            cp "$pdf" "out/CV-CHAOUI-EL-MEHDI-${lang}.pdf"
+          done
+          for pdf in adapted-by-offers/*/*/main.pdf; do
+            lang=$(basename "$(dirname "$pdf")" | tr '[:lower:]' '[:upper:]')
+            offer=$(basename "$(dirname "$(dirname "$pdf")")" | tr '[:lower:]' '[:upper:]')
+            cp "$pdf" "out/CV-CHAOUI-EL-MEHDI-${lang}-${offer}.pdf"
+          done
+          ls -l out
 
       # Also lets a PR's compiled PDFs be previewed from the run's
       # Artifacts section before merging.
@@ -46,9 +57,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cv-pdfs
-          path: |
-            CV-CHAOUI-EL-MEHDI-FR.pdf
-            CV-CHAOUI-EL-MEHDI-EN.pdf
+          path: out/*.pdf
+          if-no-files-found: error
 
   publish:
     needs: build
@@ -66,6 +76,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: cv-pdfs
+          path: out
 
       - name: Publish (or update) the "latest" release
         uses: ncipollo/release-action@v1
@@ -77,8 +88,9 @@ jobs:
             Permanent download links:
             - French: `releases/download/latest/CV-CHAOUI-EL-MEHDI-FR.pdf`
             - English: `releases/download/latest/CV-CHAOUI-EL-MEHDI-EN.pdf`
+            - Offer-adapted versions: `CV-CHAOUI-EL-MEHDI-<LANG>-<OFFER>.pdf`
             Inline browser preview: published via GitHub Pages.
-          artifacts: CV-CHAOUI-EL-MEHDI-FR.pdf,CV-CHAOUI-EL-MEHDI-EN.pdf
+          artifacts: out/*.pdf
           allowUpdates: true
           replacesArtifacts: true
           removeArtifacts: true
@@ -92,8 +104,7 @@ jobs:
       - name: Prepare Pages content
         run: |
           mkdir -p public
-          cp CV-CHAOUI-EL-MEHDI-FR.pdf public/CV-CHAOUI-EL-MEHDI-FR.pdf
-          cp CV-CHAOUI-EL-MEHDI-EN.pdf public/CV-CHAOUI-EL-MEHDI-EN.pdf
+          cp out/*.pdf public/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
