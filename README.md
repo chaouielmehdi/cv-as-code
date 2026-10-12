@@ -3,7 +3,7 @@
 Chaoui El Mehdi's CV, versioned as LaTeX source instead of a static PDF or
 Word document, available in **French and English**. Content lives in
 `fr/sections/*.tex` and `en/sections/*.tex` and is the single source of
-truth — there is no original PDF stored in this repo. Every push to `main`
+truth — there is no original PDF stored in this repo. Every merge to `main`
 recompiles both language versions and publishes them to permanent download
 links.
 
@@ -29,7 +29,7 @@ cv-as-code/
 │       └── projects.tex
 ├── assets/logos/               # Company/school logos, shared by both languages
 │   └── *.png
-├── .github/workflows/build.yml # CI: compile both → publish to Releases + Pages
+├── .github/workflows/build.yml # CI: compile both on PRs; on main also publish to Releases + Pages
 ├── skills/
 │   ├── cv-editor/SKILL.md     # How to edit CV content correctly, in both languages
 │   └── cv-export/SKILL.md     # How to hand over the compiled PDFs
@@ -55,22 +55,28 @@ nothing propagates automatically.
 
 ## Rebuilding the PDFs
 
-The CV is **not** built or committed locally. Just commit your changes and
-push to `main`:
+The CV is **not** built or committed locally. Every change goes through a
+pull request — never push directly to `main`:
 
 ```bash
+git checkout -b add-new-role
 git add fr/sections/experience.tex en/sections/experience.tex
 git commit -m "Add new role"
-git push origin main
+git push -u origin add-new-role
+# then open a PR into main and merge it once the "Build CV" check is green
 ```
 
 GitHub Actions (`.github/workflows/build.yml`) will:
-1. Compile `fr/main.tex` and `en/main.tex` independently with `xu-cheng/latex-action`.
-2. Publish the results as `CV-CHAOUI-EL-MEHDI-FR.pdf` and `CV-CHAOUI-EL-MEHDI-EN.pdf`
-   to a GitHub Release tagged `latest`, replacing the previous assets.
-3. Also deploy both PDFs to GitHub Pages, for inline browser viewing.
+1. **On the PR:** compile `fr/main.tex` and `en/main.tex` independently with
+   `xu-cheng/latex-action`, so a broken LaTeX change fails the PR check before
+   it reaches `main`. The compiled PDFs are attached to the run as the
+   `cv-pdfs` artifact for previewing. Nothing is published.
+2. **After merging to `main`:** compile both again, then publish them as
+   `CV-CHAOUI-EL-MEHDI-FR.pdf` and `CV-CHAOUI-EL-MEHDI-EN.pdf` to a GitHub
+   Release tagged `latest` (replacing the previous assets), and deploy both
+   PDFs to GitHub Pages for inline browser viewing.
 
-Build time is roughly 30–60 seconds after the push.
+Build time is roughly 30–60 seconds after the push or merge.
 
 ## Getting the compiled PDFs
 
