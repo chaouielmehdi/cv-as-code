@@ -4,18 +4,17 @@ on:
   push:
     branches:
       - main
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+  # PRs into main only compile both CVs (the "build" job) so a broken LaTeX
+  # change is caught before merging. Publishing runs on push to main only.
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy-pages.outputs.page_url }}
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,6 +39,33 @@ jobs:
         run: |
           mv fr/main.pdf CV-CHAOUI-EL-MEHDI-FR.pdf
           mv en/main.pdf CV-CHAOUI-EL-MEHDI-EN.pdf
+
+      # Also lets a PR's compiled PDFs be previewed from the run's
+      # Artifacts section before merging.
+      - name: Upload compiled PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-pdfs
+          path: |
+            CV-CHAOUI-EL-MEHDI-FR.pdf
+            CV-CHAOUI-EL-MEHDI-EN.pdf
+
+  publish:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}
+    steps:
+      - name: Download compiled PDFs
+        uses: actions/download-artifact@v4
+        with:
+          name: cv-pdfs
 
       - name: Publish (or update) the "latest" release
         uses: ncipollo/release-action@v1

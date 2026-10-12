@@ -3,8 +3,9 @@
 This repo holds Chaoui El Mehdi's CV as LaTeX source, in **two languages**:
 `fr/` (French) and `en/` (English). Each has its own `main.tex` and
 `sections/*.tex` — these are the single source of truth for content; there
-is no PDF stored in this repo. CI compiles both on every push to `main` and
-publishes them to permanent GitHub Releases links.
+is no PDF stored in this repo. CI compiles both on every PR into `main` (as a
+check) and, after merge, on `main` again to publish them to permanent GitHub
+Releases links.
 
 `fr/` and `en/` are independent files, not one templated source — a content
 change (a new role, an updated bullet, a reworded title) needs to be made in

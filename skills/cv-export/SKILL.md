@@ -6,7 +6,8 @@ description: Hand over the compiled CV PDF (French and/or English) when the user
 # CV Export
 
 The CV is published in **two languages**, each at **two fixed, permanent
-URLs**, all four updated by the same CI run on every push to `main`:
+URLs**, all four updated by the same CI run on every push to `main` (i.e.
+every merged PR — PR runs only compile, they never publish):
 
 ```
 French — Download (forces "Save As"):    https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/CV-CHAOUI-EL-MEHDI-FR.pdf
