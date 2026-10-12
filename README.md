@@ -131,9 +131,9 @@ regardless of the repo's visibility.)
 Compile from inside the folder holding the `main.tex` (paths are relative):
 
 ```bash
-cd main/fr && pdflatex -interaction=nonstopmode main.tex                         # French
-cd main/en && pdflatex -interaction=nonstopmode main.tex                         # English
-cd adapted-by-offers/alton-narsa-chatbot/fr && pdflatex -interaction=nonstopmode main.tex  # an offer
+(cd main/fr && pdflatex -interaction=nonstopmode main.tex)                         # French
+(cd main/en && pdflatex -interaction=nonstopmode main.tex)                         # English
+(cd adapted-by-offers/alton-narsa-chatbot/fr && pdflatex -interaction=nonstopmode main.tex)  # an offer
 ```
 
 Requires a LaTeX distribution (e.g. `texlive-latex-base`,

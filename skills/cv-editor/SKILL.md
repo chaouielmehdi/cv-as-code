@@ -151,9 +151,9 @@ thing to get right when editing:
   folder that holds the `main.tex`**, since `\input` and logo paths are
   relative to it:
   ```bash
-  cd main/fr && pdflatex -interaction=nonstopmode main.tex
-  cd main/en && pdflatex -interaction=nonstopmode main.tex
-  cd adapted-by-offers/<offer>/fr && pdflatex -interaction=nonstopmode main.tex
+  (cd main/fr && pdflatex -interaction=nonstopmode main.tex)
+  (cd main/en && pdflatex -interaction=nonstopmode main.tex)
+  (cd adapted-by-offers/<offer>/fr && pdflatex -interaction=nonstopmode main.tex)
   ```
   A clean compile ends with `Output written on main.pdf`. Delete the local
   build artifacts afterward (or rely on `.gitignore` — they're already

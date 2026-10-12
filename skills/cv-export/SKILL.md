@@ -60,8 +60,8 @@ the CV", etc.:
 
 ## If the request comes right after a push or edit
 
-Builds take roughly 30–60 seconds and compile **both** languages in the same
-run. If the user just pushed a commit (or you just committed and pushed an
+Builds take roughly 30–60 seconds and compile **every** CV (`main/fr`,
+`main/en` and each `adapted-by-offers/<offer>/<lang>`) in the same run. If the user just pushed a commit (or you just committed and pushed an
 edit on their behalf) and then asks for the CV:
 
 1. Check the status of the GitHub Actions workflow run for that commit
@@ -80,12 +80,14 @@ edit on their behalf) and then asks for the CV:
 
 Do not return the download link — it would point to an outdated PDF (the
 release assets are only replaced on success, and a failure in compiling
-*either* language fails the whole job, so *neither* PDF gets updated).
+*any* CV — general or offer — fails the whole job, so *none* of the PDFs
+gets updated, including the general FR/EN ones).
 Instead:
 
 1. Report that the build failed.
 2. Point the user to the Actions log for that run so they (or you, on
-   request) can see which language's compile failed and the LaTeX error.
+   request) can see which CV's `main.tex` failed to compile and the LaTeX
+   error.
 3. Optionally offer to look at the log and fix the LaTeX error yourself, then
    push a fix and re-check the new run.
 

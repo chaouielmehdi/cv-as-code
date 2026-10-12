@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  # PRs into main only compile both CVs (the "build" job) so a broken LaTeX
+  # PRs into main only compile every CV (the "build" job) so a broken LaTeX
   # change is caught before merging. Publishing runs on push to main only.
   pull_request:
     branches:
@@ -38,6 +38,7 @@ jobs:
       #   -> CV-CHAOUI-EL-MEHDI-FR-ALTON-NARSA-CHATBOT.pdf
       - name: Rename compiled PDFs
         run: |
+          shopt -s nullglob  # adapted-by-offers/ may be empty
           mkdir -p out
           for pdf in main/*/main.pdf; do
             lang=$(basename "$(dirname "$pdf")" | tr '[:lower:]' '[:upper:]')
