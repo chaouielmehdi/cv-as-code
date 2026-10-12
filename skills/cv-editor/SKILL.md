@@ -1,13 +1,15 @@
 ---
 name: cv-editor
-description: Edit the CV content stored as LaTeX in this repository. Use whenever the user wants to add, remove, reorder, or rephrase anything on the CV (experience, education, skills, projects, summary), in French, English, or both — never edit a PDF, there isn't one; the LaTeX sections in fr/ and en/ are the single source of truth.
+description: Edit the CV content stored as LaTeX in this repository. Use whenever the user wants to add, remove, reorder, or rephrase anything on the CV (experience, education, skills, projects, summary), in French, English, or both — including the offer-adapted versions in adapted-by-offers/. Never edit a PDF, there isn't one; the LaTeX sections in main/fr, main/en and adapted-by-offers/<offer>/<lang> are the single source of truth.
 ---
 
 # CV Editor
 
-This repository holds Chaoui El Mehdi's CV as version-controlled LaTeX, in
-**two languages**: `fr/` (French) and `en/` (English). There is no source
-PDF anywhere in this repo — `fr/sections/*.tex` and `en/sections/*.tex`
+This repository holds Chaoui El Mehdi's CV as version-controlled LaTeX. The
+general CV lives in `main/`, in **two languages**: `main/fr/` (French) and
+`main/en/` (English). Tailored copies for specific job applications live in
+`adapted-by-offers/<offer>/<lang>/` (see "Offer-adapted versions" below).
+There is no source PDF anywhere in this repo — the `sections/*.tex` files
 **are** the CV. Every compiled PDF is a build artifact regenerated from this
 source by CI (see `skills/cv-export/SKILL.md` for how to hand the compiled
 PDFs to the user).
@@ -16,7 +18,7 @@ PDFs to the user).
 
 ```
 cv-as-code/
-├── fr/
+├── main/fr/
 │   ├── main.tex               # Layout & styling ONLY — margins, fonts, colors,
 │   │                          # section formatting, \input{} calls. No CV content.
 │   └── sections/
@@ -28,7 +30,7 @@ cv-as-code/
 │                              # projects in the source CV are client engagements
 │                              # already documented under their employer in
 │                              # experience.tex)
-├── en/                        # Same structure as fr/, translated content
+├── main/en/                   # Same structure as main/fr/, translated content
 │   ├── main.tex
 │   └── sections/
 │       ├── profile.tex        # Professional Summary
@@ -36,25 +38,35 @@ cv-as-code/
 │       ├── education.tex      # Education
 │       ├── skills.tex         # Technical Skills, Languages, Strengths, Interests
 │       └── projects.tex
-├── assets/logos/               # Company/school logos, shared by fr/ and en/
-├── .github/workflows/build.yml # Compiles both → releases/download/latest/CV-CHAOUI-EL-MEHDI-{FR,EN}.pdf
+├── adapted-by-offers/
+│   └── <company>-<client>-<project>/
+│       └── fr/ (and/or en/)   # Full independent copy of main/<lang>/, tailored
+│           ├── main.tex       # to one job offer
+│           └── sections/
+├── assets/logos/               # Company/school logos, shared by every CV
+├── .github/workflows/build.yml # Compiles every main.tex → releases/download/latest/CV-CHAOUI-EL-MEHDI-<LANG>[-<OFFER>].pdf
 └── README.md
 ```
 
-`fr/` and `en/` are two **independent** LaTeX builds. `en/sections/*.tex`
-reference the same logos as `fr/` via `../assets/logos/...` (one level up
-from either language folder) — there is no per-language copy of the images.
+Every `main.tex` is an **independent** LaTeX build. All of them reference
+the same logos in the repo-root `assets/logos/` via relative paths — there is
+no per-CV copy of the images:
+- from `main/fr/` and `main/en/`: `../../assets/logos/<name>.png`
+- from `adapted-by-offers/<offer>/<lang>/`: `../../../assets/logos/<name>.png`
 
-## Keeping French and English in sync
+## Keeping French and English in sync (`main/`)
 
-**`fr/` and `en/` are not templates driven from one source — they are two
+This section is about the general CV in `main/`. Offer-adapted versions
+follow their own rules — see "Offer-adapted versions" below.
+
+**`main/fr/` and `main/en/` are not templates driven from one source — they are two
 separate sets of files that happen to describe the same career.** Nothing
 propagates automatically between them. This is the single most important
 thing to get right when editing:
 
 - A factual change (new role, new bullet, updated dates/duration, new
   technology, a title/wording tweak) needs to be applied in **both**
-  `fr/sections/*.tex` and `en/sections/*.tex`, as a faithful translation —
+  `main/fr/sections/*.tex` and `main/en/sections/*.tex`, as a faithful translation —
   not necessarily word-for-word, but the same facts, same emphasis, same
   structure (same number of bullets in the same order).
 - If a user asks for an edit without specifying a language, default to
@@ -65,16 +77,17 @@ thing to get right when editing:
 - When doing a broader content review, check both languages, not just one —
   it's easy for them to drift after several rounds of single-language edits.
 - Layout/styling changes (spacing, logo sizes, page-break fixes, macros
-  defined in `main.tex`) should also usually be mirrored in both `fr/main.tex`
-  and `en/main.tex`, since they're meant to look and behave the same way —
+  defined in `main.tex`) should also usually be mirrored in both `main/fr/main.tex`
+  and `main/en/main.tex`, since they're meant to look and behave the same way —
   unless the user asks for a language-specific layout tweak.
 
 ## What's safe to edit vs. layout-only
 
-- **Safe to edit freely: `fr/sections/*.tex` and `en/sections/*.tex`.** This
+- **Safe to edit freely: any `sections/*.tex`** (in `main/<lang>/` or
+  `adapted-by-offers/<offer>/<lang>/`). This
   is where all real content lives — job history, bullet points, dates,
   degrees, skills. Editing these files is the normal way to update the CV.
-- **Layout-only: `fr/main.tex` and `en/main.tex`.** Only touch these for
+- **Layout-only: every `main.tex`.** Only touch these for
   margins, fonts, colors, spacing, or section-heading style/macros. Never
   put CV content (a job, a bullet, a skill) directly in `main.tex` — it
   belongs in a `sections/*.tex` file so the diff history stays meaningful
@@ -100,7 +113,7 @@ thing to get right when editing:
   number of channels/banks/clients integrated, etc.). Never invent a number
   that isn't backed by what the user tells you — CV content must stay
   factual, in both languages.
-- **Language**: `fr/` is written in French, `en/` in natural professional
+- **Language**: `fr/` folders are written in French, `en/` folders in natural professional
   English — not a stiff word-for-word translation. Company/project names,
   proper nouns, and technology names stay as-is in both (e.g. "TAMKeeN",
   "l'EDP Lanacash" / "Lanacash EDP", "Camunda").
@@ -114,8 +127,8 @@ thing to get right when editing:
   \end{itemize}
   ```
   Add or remove `\item` lines freely — just keep the `\begin{itemize}` /
-  `\end{itemize}` pair balanced. Do this in both `fr/` and `en/` versions of
-  the file.
+  `\end{itemize}` pair balanced. In `main/`, do this in both the `fr/` and
+  `en/` versions of the file.
 - Each job/role is its own `\subsection*{...}` block in `experience.tex`. To
   add a new role, copy an existing block (heading line, `Projet :`/`Project :`,
   `Réalisations :`/`Achievements :` itemize, `Technologies :` line) and edit
@@ -135,11 +148,12 @@ thing to get right when editing:
   don't paste smart quotes copied from a Word doc/PDF, they can break
   compilation.
 - After any edit, compile locally to check for errors — **from inside the
-  relevant language folder**, since `\input` and logo paths are relative to
-  it:
+  folder that holds the `main.tex`**, since `\input` and logo paths are
+  relative to it:
   ```bash
-  cd fr && pdflatex -interaction=nonstopmode main.tex
-  cd ../en && pdflatex -interaction=nonstopmode main.tex
+  cd main/fr && pdflatex -interaction=nonstopmode main.tex
+  cd main/en && pdflatex -interaction=nonstopmode main.tex
+  cd adapted-by-offers/<offer>/fr && pdflatex -interaction=nonstopmode main.tex
   ```
   A clean compile ends with `Output written on main.pdf`. Delete the local
   build artifacts afterward (or rely on `.gitignore` — they're already
@@ -154,20 +168,22 @@ thing to get right when editing:
   never as text baked into an image. Every fact on the CV must exist as real
   text somewhere, regardless of any decoration placed next to it.
 - **Company/school logos are the one sanctioned exception**, added via the
-  `\cvlogo[height][raise]{path}` macro (defined identically in both
-  `fr/main.tex` and `en/main.tex`) at the end of a `\subsection*` heading —
+  `\cvlogo[height][raise]{path}` macro (defined identically in every
+  `main.tex`) at the end of a `\subsection*` heading —
   see `assets/logos/` and how `experience.tex`/`education.tex` use it in
   both languages. They are purely decorative and placed *in addition to*
   the plain-text company name that's already in the heading, never instead
   of it. Rules for adding a new one:
   - Extract/save the logo as a PNG in `assets/logos/` (repo root, shared by
-    both languages), cropped to its visual content (no large empty margins
+    every CV), cropped to its visual content (no large empty margins
     — `\cvlogo` fixes the height, so a logo with lots of internal
     whitespace will render illegibly small).
-  - Reference it from a language file as `\cvlogo{../assets/logos/<name>.png}`
-    (note the `../` — `assets/` lives one level above `fr/`/`en/`) right
-    after the heading text, before the closing `}`. Add it in both language
-    files so the two stay visually consistent.
+  - Reference it as `\cvlogo{../../assets/logos/<name>.png}` from
+    `main/<lang>/` (two levels up to the repo root), or
+    `\cvlogo{../../../assets/logos/<name>.png}` from
+    `adapted-by-offers/<offer>/<lang>/` (three levels up), right after the
+    heading text, before the closing `}`. In `main/`, add it in both
+    language files so the two stay visually consistent.
   - Default height/vertical alignment usually works; some logos (e.g. more
     square aspect ratios like CIH Bank's) need an explicit
     `\cvlogo[height][raise]{...}` override to look right next to the title
@@ -177,7 +193,7 @@ thing to get right when editing:
     can't confirm the name is also present as plain text nearby, don't add
     the logo.
   - After adding one, run `pdftotext main.pdf -` (or `pdftotext -layout`) in
-    each language folder and confirm the company name still shows up in the
+    each CV folder and confirm the company name still shows up in the
     plain-text output — that's the real ATS-safety check, not just how it
     looks.
 - Don't use `\newpage` to force layout for ordinary content — let it flow
@@ -190,3 +206,37 @@ thing to get right when editing:
 - Avoid unicode symbols/emoji in headers or bullets (the original CV used
   icons like ☎️ ✉️ 💻 — those were intentionally dropped in this LaTeX
   version for ATS-safety; don't reintroduce them).
+
+## Offer-adapted versions (`adapted-by-offers/`)
+
+Tailored copies of the CV for specific job applications. These conventions
+were set by the user — follow them every time:
+
+- **Folder naming:** `adapted-by-offers/<company>-<client>-<project>/<lang>/`,
+  lowercase and hyphenated. E.g. "boite: Alton | client: ANAPEC | project:
+  matching app" → `adapted-by-offers/alton-anapec-matching-app/fr/`. Create
+  **only the languages the user asks for** — the first offers are French
+  only, so there is no FR/EN sync rule for offers. If the language isn't
+  stated, ask.
+- **Starting a new offer:** copy the current `main/<lang>/` as-is (the whole
+  folder: `main.tex` + `sections/`), then:
+  1. Rewrite every logo path from `../../assets/logos/` to
+     `../../../assets/logos/` (the offer folder is one level deeper).
+  2. Add the provenance header right after the `% !TEX program` line of the
+     offer's `main.tex`, naming the offer and the `main` commit it was
+     copied from (copy the format from an existing offer).
+  3. Don't change any content yet — **the user gives the updates** for each
+     offer. Apply exactly what they ask, to that offer's files only.
+- **Independent and duplicated on purpose.** Each offer is a standalone
+  snapshot. Don't refactor offers into shared, templated, or override-based
+  sources. Edits to an offer never touch `main/` or other offers; edits to
+  `main/` don't propagate to existing offers unless the user asks for it.
+- **Same CV conventions apply** (sections above): factual content only —
+  tailoring means choosing what to emphasize, reorder, or cut, never
+  inventing experience or skills; tense; bullet style; ATS-safety; LaTeX
+  escaping; compile from inside the offer's language folder.
+- **Build/publish:** nothing to configure — CI compiles every
+  `adapted-by-offers/*/*/main.tex` and publishes it as
+  `CV-CHAOUI-EL-MEHDI-<LANG>-<OFFER>.pdf` (offer folder name uppercased),
+  e.g. `CV-CHAOUI-EL-MEHDI-FR-ALTON-NARSA-CHATBOT.pdf`. See
+  `skills/cv-export/SKILL.md` for the links.

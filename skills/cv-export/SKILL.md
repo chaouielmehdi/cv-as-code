@@ -1,6 +1,6 @@
 ---
 name: cv-export
-description: Hand over the compiled CV PDF (French and/or English) when the user asks to "give me my CV", "export my CV", "send me the PDF", "download the CV", or similar — use this instead of compiling LaTeX locally or digging through GitHub Actions artifacts.
+description: Hand over the compiled CV PDF (French and/or English, general or adapted to a specific job offer) when the user asks to "give me my CV", "export my CV", "send me the PDF", "download the CV", or similar — use this instead of compiling LaTeX locally or digging through GitHub Actions artifacts.
 ---
 
 # CV Export
@@ -16,7 +16,24 @@ English — Download (forces "Save As"):   https://github.com/chaouielmehdi/cv-a
 English — View inline in the browser:    https://chaouielmehdi.github.io/cv-as-code/CV-CHAOUI-EL-MEHDI-EN.pdf
 ```
 
-Same content, two languages, two presentation modes each. GitHub always
+### Offer-adapted versions
+
+Each folder in `adapted-by-offers/<offer>/<lang>/` is published by the same
+CI run under the same two URL patterns, with the language and the
+uppercased offer folder name as a suffix:
+
+```
+Download:  https://github.com/chaouielmehdi/cv-as-code/releases/download/latest/CV-CHAOUI-EL-MEHDI-<LANG>-<OFFER>.pdf
+View:      https://chaouielmehdi.github.io/cv-as-code/CV-CHAOUI-EL-MEHDI-<LANG>-<OFFER>.pdf
+```
+
+e.g. `adapted-by-offers/alton-narsa-chatbot/fr/` →
+`CV-CHAOUI-EL-MEHDI-FR-ALTON-NARSA-CHATBOT.pdf`. Only the languages that
+exist in the offer's folder are published (the first offers are FR only).
+If the user asks for "the CV for <offer>", give these; if it's unclear
+whether they mean the general CV or an offer version, ask.
+
+The general CV: same content, two languages, two presentation modes each. GitHub always
 serves Release assets with a forced download (`Content-Disposition:
 attachment`) — that's a platform behavior, not something this repo
 controls. GitHub Pages serves the identical files with a normal
@@ -55,7 +72,7 @@ edit on their behalf) and then asks for the CV:
    link.
 3. Once the run succeeds, return the fixed Releases URL(s) — same links as
    always, now pointing at the freshly compiled PDFs.
-4. If the edit was only made in one language (`fr/` or `en/`), remember the
+4. If the edit was only made in one language (`main/fr/` or `main/en/`), remember the
    *other* language's PDF is unchanged — mention that if relevant, since the
    user might expect both to reflect the edit.
 
