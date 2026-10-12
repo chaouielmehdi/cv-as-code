@@ -45,6 +45,18 @@ by the user — follow them every time):
   "engineer" anything around them. An edit to an offer never touches `main/`
   or other offers, and an edit to `main/` does not propagate to existing
   offers (they're snapshots) unless the user asks for it.
+- **An offer CV must read like a normal CV.** Never mention the offer or
+  what the CV is for: no tender/offer number or name, no "profil proposé",
+  "poste proposé", "rôle dans le projet", "attributions spécifiques",
+  "soumissionnaire", "concurrent", "postulant", "objet du marché", and no
+  keywords lifted from the tender (e.g. "e-matching"). Tailor only through
+  emphasis, ordering, wording and cuts. If a signature block is needed, word
+  it neutrally ("Signature : …", "Le représentant d'Alton : …"). Real facts
+  stay (e.g. ANAPEC as e-VAL's final client).
+- **Signed copies and personal data stay out of the repo.** The repo and its
+  PDFs are public. A handwritten signature, date of birth, nationality, CNSS
+  number, etc. go only into private copies built outside the repo and sent
+  to the user as files — never committed.
 - All the CV conventions in `skills/cv-editor/SKILL.md` still apply
   (factual content only — never invent experience; tense, bullet style,
   ATS-safety, LaTeX escaping).
