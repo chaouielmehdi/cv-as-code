@@ -231,6 +231,19 @@ were set by the user — follow them every time:
   snapshot. Don't refactor offers into shared, templated, or override-based
   sources. Edits to an offer never touch `main/` or other offers; edits to
   `main/` don't propagate to existing offers unless the user asks for it.
+- **Must read like a normal CV.** Never mention the offer or what the CV
+  is for: no tender/offer number or name, no "profil proposé" / "poste
+  proposé" / "rôle dans le projet" / "attributions spécifiques" blocks, no
+  "soumissionnaire" / "concurrent" / "postulant" / "objet du marché"
+  wording, no keywords lifted from the tender (e.g. "e-matching"), and no
+  tender numbers or RC/CPS citations in source comments either (the repo
+  is public; the provenance header naming the offer folder is fine). If a
+  signature block is needed, word it neutrally ("Signature : …", "Le
+  représentant d'Alton : …").
+- **Signed copies / personal data:** a scanned signature, date of birth,
+  nationality, CNSS number, etc. are never committed. Build signed copies
+  from a scratch copy of the offer folder (outside the repo) and send them
+  to the user as files.
 - **Same CV conventions apply** (sections above): factual content only —
   tailoring means choosing what to emphasize, reorder, or cut, never
   inventing experience or skills; tense; bullet style; ATS-safety; LaTeX
